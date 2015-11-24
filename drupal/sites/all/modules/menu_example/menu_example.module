@@ -1,0 +1,21 @@
+<?php
+/**
+ * Implements hook_menu().
+ */
+function me_menu() {
+ 
+  $items = array();
+  $items['simple-page'] = array(
+    'title' => 'Simple page',
+    'page callback' => 'me_simple_page_content',
+    'access callback' => TRUE,
+    'menu_name' => 'main-menu',
+  );
+ 
+  return $items;
+}
+
+function me_simple_page_content() {
+  return 'Content of simple page';
+}
+?>

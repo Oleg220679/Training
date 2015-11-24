@@ -1,0 +1,27 @@
+<?php
+/**
+ * Implements hook_block_info()
+ */
+function test_block_info() {
+  $blocks['test-block'] = array( 
+    'info' => t('My test block'),
+  );
+ 
+  return $blocks;
+}
+  
+/**
+ * Implements hook_block_view()
+ */
+function test_block_view($delta = '') {
+  $block = array();
+ 
+  switch ($delta) {
+    case 'test-block':
+      $block['subject'] = t('My test block');
+      $block['content'] = t('Any text');
+     break;
+  }
+  return $block;
+}
+?>
