@@ -2,11 +2,11 @@
 /**
  * Implements hook_menu().
  */
-function me_menu() {
+function menu_example_menu() {
  
   $items = array();
   $items['simple-page'] = array(
-    'title' => 'Simple page',
+    'title' => 'Main page',
     'page callback' => 'me_simple_page_content',
     'access callback' => TRUE,
     'menu_name' => 'main-menu',
@@ -16,6 +16,6 @@ function me_menu() {
 }
 
 function me_simple_page_content() {
-  return 'Content of simple page';
+  return 'Content of main page';
 }
 ?>

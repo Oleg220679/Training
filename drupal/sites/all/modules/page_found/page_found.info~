@@ -1,0 +1,5 @@
+name = page_found
+description = using hook_menu() for 403 and 404 pages
+version = 1.0
+core = 7.x
+package = Custom

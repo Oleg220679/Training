@@ -1,0 +1,20 @@
+<?php
+/**
+ * Implements hook_menu().
+ */
+function page_found_menu() {
+ 
+  $items = array();
+    $items['page-found'] = array(
+    'title' => 'page-found',
+    'page callback' => 'page_found',
+    'access callback' => TRUE,
+  );
+ 
+  return $items;
+}
+
+function page_found() {
+  return '<h1>404: page not found</h1>';
+}
+?>

@@ -1,0 +1,79 @@
+<?php
+/**
+ * Implements hook_menu().
+ */
+function my_theming_menu() {
+  
+  $items['theming-page'] = array(
+    'title' => 'Theming page',
+    'page callback' => 'theming_page_content',
+    'access callback' => TRUE,
+  );
+ 
+  return $items;
+}
+ 
+function theming_page_content() {
+  $colgroup = array(
+  array(
+    array(
+      'class' => array('funky'),
+      'align' => 'center',
+    ),
+   ),
+  );
+ 
+  $variables = array( 
+   'header' => array(                // заголовки колонок таблицы
+    0 => 'Title',
+    1 => 'Description',
+    ),
+   'rows' => array(                   // поля таблицы
+    0 => array('Row Title 1', 'Row Description 1'),
+    1 => array(
+      'data' => array(
+        0 => 'Row Title 2',
+        1 => array(
+          'data' => 'Row Description 2',
+          'class' => array('newrow'),     // аттрибуты для конкретного поля
+        ),
+       ),
+     ),
+    ),
+    'attributes' => array(
+    'class'      => array('newtable'),     // атрибуты таблицы
+    ),
+    'caption'    => 'Theme_table Example',     // текст для caption
+    'colgroups'  => $colgroup,        // параметры для тега colgroups
+    'sticky'     => FALSE,               // булевское значение, определяет фиксирование заголовков таблицы (thead) при прокрутке
+    'empty'      => 'Table is empty',                               // текст, который будет отображаться при пустых полях таблицы
+  );
+
+  $items = array('item 1', 'item 2', 'item 3');    // Массив с элементами списка
+  $title = 'Theme_item_list Example';       // Заголовок списка
+  $type = 'ol';                             // Тип списка
+  $attributes = array(                      // Атрибуты списка
+         'class' => 'newclass',
+  );
+
+  //$colldown = array(
+     //'#title'       => 'Explanation',           // содержание тега legend
+     //'#value'       => '<div>Any text</div>',    // текст внутри fieldset-а  
+     //'#attributes'  => array('class' => 'help'), // класс fieldset-а 
+     //'#collapsible' => true,                     // fieldset будет уметь сворачиваться/разворачиваться
+     //'#collapsed'   => true,                     // по умолчанию fieldset будет свёрнут    
+   //); 
+   
+      $itl = theme_item_list(array('items' => $items, 'title' => $title, 'type' => $type, 'attributes' => $attributes));
+
+      $tbl = theme_table($variables);
+
+      //$fld = theme_fieldset($colldown);
+
+	  return $itl . $tbl;
+} 
+     
+
+?>
+
+
