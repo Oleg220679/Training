@@ -1,0 +1,5 @@
+name = page_error
+description = using hook_menu() for 403 page
+version = 1.0
+core = 7.x
+package = Custom

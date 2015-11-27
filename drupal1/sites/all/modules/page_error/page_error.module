@@ -1,0 +1,21 @@
+<?php
+/**
+ * Implements hook_menu().
+ */
+function page_error_menu() {
+ 
+  $items = array();
+  $items['page-access'] = array(
+    'title' => 'page-access',
+    'page callback' => 'page_access',
+    'access callback' => TRUE,
+  );
+
+  return $items;
+}
+
+function page_access() {
+  return '<h1>403: access denied</h1>';
+}
+
+?>

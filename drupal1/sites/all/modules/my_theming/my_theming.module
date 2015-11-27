@@ -1,0 +1,143 @@
+<?php
+/**
+ * Implements hook_theme().
+ */
+function my_theming_menu() {
+  
+  $items['theming-page'] = array(
+    'title' => 'Theming page',
+    'page callback' => 'theming_page_content',
+    'access callback' => TRUE,
+  );
+ 
+  return $items;
+}
+ 
+
+/**
+ * Implements hook_theme().
+ */
+function my_theming_theme($existing, $type, $theme, $path) {
+  return array(
+               'my_theming_function' => 
+               array(
+                     'variables' => array('text_one' => NULL, 'text_two' => NULL),
+               ),
+               'my_theming_template' => 
+               array(
+                     'variables' => array('text_one' => NULL, 'text_two' => NULL),
+                     'template'  => 'my_theming_template',
+               ),
+         );
+}
+      
+//callback function
+function theming_page_content() {
+/**
+ * Theme function exmple.
+ */
+function theme_my_theming_function($variables) {
+  $output = "<h2>" . $variables['text_one'] . "</h2>";
+  $output .= "<strong>" . $variables['text_two'] . "</strong>";
+  return $output;
+}
+
+  //theme_table
+  $colgroup = array(
+  array(
+    array(
+      'class' => array('funky'),
+      'align' => 'center',
+    ),
+   ),
+  );
+ 
+  $variables = array( 
+   'header' => array(                      // заголовки колонок таблицы
+    0 => 'Title',
+    1 => 'Description',
+    ),
+   'rows' => array(                        // поля таблицы
+    0 => array('Row Title 1', 'Row Description 1'),
+    1 => array(
+      'data' => array(
+        0 => 'Row Title 2',
+        1 => array(
+          'data' => 'Row Description 2',
+          'class' => array('newrow'),      // аттрибуты для конкретного поля
+        ),
+       ),
+     ),
+    ),
+    'attributes' => array(
+    'class'      => array('newtable'),     // атрибуты таблицы
+    ),
+    'caption'    => 'Theme_table Example', // текст для caption
+    'colgroups'  => $colgroup,             // параметры для тега colgroups
+    'sticky'     => FALSE,                 // булевское значение, определяет фиксирование заголовков таблицы (thead) при прокрутке
+    'empty'      => 'Table is empty',      // текст, который будет отображаться при пустых полях таблицы
+  );
+  $tbl = theme_table($variables);
+
+  //theme_item_list
+  $items = array('item 1', 'item 2', 'item 3');    // Массив с элементами списка
+  $title = 'Theme_item_list Example';              // Заголовок списка
+  $type = 'ol';                                    // Тип списка
+  $attributes = array(                             // Атрибуты списка
+         'class' => 'newclass',
+  );
+  $itl = theme_item_list(array('items' => $items, 'title' => $title, 'type' => $type, 'attributes' => $attributes));
+    
+    drupal_add_library('system', 'drupal.collapse');
+
+   // fieldset
+  $edit_element = array( 
+          // list title 
+          '#title'       => t('Click to look inside'), 
+          // content fieldset-а 
+          '#children'    => t('This is main text in fieldset!'), 
+          // list of variable 
+          '#collapsible' => true,   
+          // and collapsed 
+          '#collapsed'   => true, 
+          // we indicate in attributes that specified classes must be used
+          '#attributes'  => array(  
+                                  'class' => array('collapsible', 'collapsed')
+                                  ), 
+          ); 
+
+// input a function $fieldset_edit that will output field into 
+
+$fieldset_edit = theme('fieldset', array('element' => $edit_element));
+   
+    //theme_image_style
+$img = theme_image_style(array(
+      'style_name' => 'thumbnail',
+      'path'       => 'public://leon.jpg',
+      'alt'        => 'Image alt',
+      'width'      => '50px',
+      'height'     => '50px',
+    ));  
+   
+
+$text_one = 'This is header 2 text';
+$txt = theme('my_theming_function', array('text_one' => $text_one, 'text_two' => 'This is strong text'));  
+
+//function my_theming_renderable_page() {
+  //$text_one = "This is text stylized by template file";
+ // $output = array(
+    //'#theme' => 'my_theme_template',
+    //'#type'  => 'markup',
+    //'#text_one' => $text_one,
+    //'#text_two' => 'Text_Two',
+    //);
+  //return $output;
+//}
+
+return $itl . $tbl . $fieldset_edit . $img . $txt;
+} 
+     
+
+?>
+
+

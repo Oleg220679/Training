@@ -1,0 +1,5 @@
+name = my_theming
+description = shows implementation of theming functions 
+version = 1.0
+core = 7.x
+package = Custom

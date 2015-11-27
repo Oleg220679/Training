@@ -1,0 +1,16 @@
+<?php
+/**
+ * Implements hook_permission().
+ */
+function my_perm_permission() {
+  return array(
+    'administer my block' => array(
+      'title' => t('Administer my block'),
+      'description' => t('Perform of my block content viewing.'),
+    ),
+  );
+}
+  
+?>
+
+

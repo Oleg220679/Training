@@ -1,0 +1,44 @@
+<?php
+/**
+ * Implements hook_block_info().
+ */
+function my_block_block_info() {
+  $blocks['my_block'] = array( 
+    'info' => 'My test block',
+  );
+ 
+  return $blocks;
+}
+  
+/**
+ * Implements hook_block_view().
+ */
+function my_block_block_view($delta = '') {
+  $block = array();
+ 
+  switch ($delta) {
+    case 'my_block':
+    if (user_access('Administer my block')) {
+        $block['subject'] = 'My test block';
+        $block['content'] = 'Any text';
+    } else {
+        $block['subject'] = 'My test block';
+        $block['content'] = 'access to view this content is denied';
+      }
+    break;
+  }
+  return $block;
+}
+
+/**
+ * Implements hook_permission().
+ */
+function my_perm_permission() {
+  return array(
+    'administer my block' => array(
+      'title' => t('Administer my block'),
+      'description' => t('Perform of my block content viewing.'),
+    ),
+  );
+}
+?>
