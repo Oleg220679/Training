@@ -7,7 +7,8 @@ function my_forms_menu() {
   $items = array();
   $items['contact-page'] = array(
     'title' => 'Contacts',
-    'page callback' => 'contact_page_content',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('my_forms_page_form'),
     'access callback' => TRUE,
     'menu_name' => 'main-menu',
   );
@@ -15,72 +16,119 @@ function my_forms_menu() {
   return $items;
 }
 
-function contact_page_content() {
-drupal_set_message(t('form was subm' . <br> 
-	. $form_state['value'] ['phone number']
-	));  
+/**
+ * Build form.
+ */
+function my_forms_page_form($form, $form_state) {
+  $form = array();
+  $form['name'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Name'),
+    '#description' => "Please enter yuor name.",
+    '#size' => 20,
+  );
+  $form['surname'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Surname'),
+    '#description' => "Please enter yuor surname.",
+    '#size' => 20,
+  );
+  $form['nickname'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Nickname'),
+    '#required' => TRUE,
+    '#description' => "Please enter yuor nickname.",
+    '#size' => 20,
+  );
+
+  $form['email'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Email'),
+    '#required' => TRUE,
+    '#default_value' => "",
+    '#description' => "Please enter your email.",
+    '#size' => 20,
+    '#maxlength' => 20,
+    '#element_validate' => array('MODULE_email_element_validate'),
+);
   
-  $form = '
-<!--noindex--> 
-  <form action = "my_forms.module.php" method="POST">
-    <div >
-      <label for="name">Name</label>
-      <input type="text" name="name">
-    </div>
-    <div>
-      <label for="name">Surname</label>
-      <input type="text" name="name">
-    </div>
-    <div>
-      <label for="name">Nick(*)</label>
-      <input type="text" name="name"required>
-    </div>
-    <div>
-      <label for="name">Email(*)</label>
-      <input type="text" name="name"required>
-    </div>
-    <div>
-      <label for="name">Telefone number</label>
-      <input type="text" name="name"required>
-    </div>
-    <label for="name">Sex</label>
-      <input type="text" name="name"required>
-    </div>
-    <div style>
-    <label for="name">Country</label> 
-    <select size="3" multiple name="country[]">
-    <option >Select country</option>
-    <option value="Ukraine">Ukraine</option>
-    <option value="Russia">Russia</option>
-    <option value="USA">USA</option>
-               </select>
-    </div>
-    <div>
-      <label for="name">Message(*)</label>
-      <input type="textarea" name="name"required>
-    </div>
-    <p><b>С какими операционными системами вы знакомы?</b></p>
-    <p><input type="checkbox" name="option1" value="a1" checked>Windows 95/98</p>
-    <fieldset>
-   <legend>Работа со временем</legend>
-     <input type="checkbox"> создание пунктуальности (никогда не 
-      будете никуда опаздывать);<br>
-     <input type="checkbox"> излечение от пунктуальности (никогда 
-      никуда не будете торопиться);<br>
-     <input type="checkbox"> изменение восприятия времени и часов.
-      <p><input type="submit"></p>
-  </fieldset>
+  $form['number'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Phone number'),
+    '#description' => "Please enter yuor phone number.",
+    '#maxlength' => 10,
+    '#size' => 20,
+    '#element_validate' => array('element_validate_integer'), //build in function
+  );  
 
+  $form['sex'] = array( 
+    '#type' => 'radios',
+    '#title' => t('Yuor sex'),
+    '#options' => array('man' => t('Мan'), 'woman' => t('Woman')),
+    '#description' => "Please point yuor sex.",
+    '#size' => 20,
+  );
 
+  $form['country'] = array( 
+    '#type' => 'select',
+    '#title' => t('Country'),
+    '#options' => array('Ukraine' => t('Ukraine'), 'Russia' => t('Russia'), 'USA' => t('USA')),
+    '#description' => "Please select yuor country.",
+  );
 
-      <input type="password" name="pass">
-    </div>
+  $form['message'] = array(
+    '#type' => 'textarea',
+    '#title' => t('Message'),
+    '#required' => TRUE,
+    '#description' => "Please enter yuor message.",
+  );  
 
-    <input type="submit" name="submit" value="Submit">
-     </form><!--/noindex-->
-';
+  $form['rules'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Approval of rules'),
+    '#required' => TRUE,
+    '#description' => "I accept all regulations.",
+  );      
+  
+  $form['fieldset'] = array(
+    '#title' => 'Fieldset',
+    '#type' => 'fieldset',
+  );
+  $form['fieldset']['markup'] = array(
+    '#markup' => '<p>Fill all fields of form and press submit</p>',
+  );
 
-return 'Enter your contacts in form below' . $form;
-
-} 
-?>
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Submit'),
+  );
+  return $form;
+}  
+// email validation function
+  function MODULE_email_element_validate($element, &$form_state, $form) {
+   if (!valid_email_address($element['#value'])) {
+     form_error($element, t('Please enter a valid email address.'));
+  }
+}
+/**
+ * Submit function for my_forms_page_form.
+ */
+function my_forms_page_form_submit($form, &$form_state) {
+    drupal_set_message('Form sumitted! your data:');
+    drupal_set_message("Your name: " .
+    $form_state['values']['name']);
+    drupal_set_message("Your surname: " .
+    $form_state['values']['surname']);
+    drupal_set_message("Your nickname: " .
+    $form_state['values']['nickname']);
+    drupal_set_message("Your email: " .
+    $form_state['values']['email']);
+    drupal_set_message("Your phone number: " .
+    $form_state['values']['number']);
+    drupal_set_message("Your sex: " .
+    $form_state['values']['sex']);
+    drupal_set_message("Your country: " .
+    $form_state['values']['country']);
+    drupal_set_message("Your message: " .
+    $form_state['values']['message']);
+}  
